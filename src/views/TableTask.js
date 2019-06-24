@@ -3,30 +3,16 @@ import Table from 'react-bootstrap/Table'
 
 class TableTask extends Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      tasks: [{ id:1, title: 'task 1'}, { id: 2, title: 'task 2'}]
-    }
-  }
-
-  deleteTask = (id) => {
-
-    this.setState({
-      tasks: this.state.tasks.filter( task => task.id !== id )
-    })
-  }
-
   render () {
-      return (
-        <Table>
-          <TableHead />
-          <TableBody
-            tasks={this.state.tasks}
-            deleteTask={ this.deleteTask }/>
-        </Table>
-      )
+    const { tasks, deleteTask } = this.props
+    return (
+      <Table>
+        <TableHead />
+        <TableBody
+          tasks={ tasks }
+          deleteTask={ deleteTask }/>
+      </Table>
+    )
   }
 }
 
