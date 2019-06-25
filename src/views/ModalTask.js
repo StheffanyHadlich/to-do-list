@@ -7,75 +7,73 @@ class ModalTask extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.state = {
-      show: false,
-    };
   }
 
-  handleClose() {
-    this.setState({ show: false });
-  }
-
-  handleShow() {
-    this.setState({ show: true });
+  handleSubmit = () => {
+    const { handleSubmit, handleModal } = this.props
+    handleSubmit()
+    handleModal()
   }
 
   render() {
+    const { showModal, handleModal, currentTask, handleChange } = this.props
+
     return (
       <>
-        <Button variant="success" onClick={this.handleShow}>
+        <Button
+          variant="success"
+          onClick={ handleModal }
+          className = "buttonModal"
+        >
           +
         </Button>
 
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal show={ showModal } onHide={ handleModal }>
           <Modal.Header closeButton>
-            <Modal.Title>Create task</Modal.Title>
+            <Modal.Title>Task</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <TaskForm />
+            <TaskForm
+              state={ currentTask }
+              onChange={ handleChange }
+            />
           </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={ handleModal }>
+              Close
+            </Button>
+            <Button variant="primary" onClick={ this.handleSubmit }>
+              Save Changes
+            </Button>
+          </Modal.Footer>
         </Modal>
       </>
     )
   }
 }
 
-export const TaskForm = () => {
-  return (
-    <Form>
-      <Form.Group controlId="formTitle">
-        <Form.Label>Title</Form.Label>
-        <Form.Control type="text" placeholder="Title" />
-      </Form.Group>
+export const TaskForm = props => {
 
-      <Form.Group controlId="formDescription">
-        <Form.Label>Description</Form.Label>
-        <Form.Control type="text" placeholder="Description" />
-      </Form.Group>
+  const inputs = Object.keys(props.state).map(key => {
 
-      <Form.Group controlId="formTime">
-        <Form.Label>Date/Time</Form.Label>
-        <Form.Control type="datetime-local" placeholder="Date/Time" />
+    return (
+      <Form.Group key={key} >
+        <Form.Label>{key}</Form.Label>
+        <Form.Control
+          type = { key.includes('date') ? 'datetime-local' : 'text'}
+          name = { key }
+          placeholder = { key }
+          value = { props.state[key] }
+          onChange = { props.onChange }
+        />
       </Form.Group>
+    )
+  })
 
-      <Form.Group controlId="formDuration">
-        <Form.Label>Duration</Form.Label>
-        <Form.Control type="text" placeholder="Duration" />
-      </Form.Group>
+  return <Form> { inputs } </Form>
 
-      <Form.Group controlId="formReminder">
-        <Form.Label>Reminder</Form.Label>
-        <Form.Control type="text" placeholder="Reminder" />
-      </Form.Group>
-
-      <Button variant="success" type="submit">
-        Save task
-      </Button>
-    </Form>
-  )
 }
 
 export default ModalTask

@@ -4,13 +4,15 @@ import Table from 'react-bootstrap/Table'
 class TableTask extends Component {
 
   render () {
-    const { tasks, deleteTask } = this.props
+    const { tasks, deleteTask, editTask } = this.props
     return (
       <Table>
         <TableHead />
         <TableBody
-          tasks={ tasks }
-          deleteTask={ deleteTask }/>
+          tasks = { tasks }
+          deleteTask = { deleteTask }
+          editTask = { editTask }
+        />
       </Table>
     )
   }
@@ -38,6 +40,7 @@ export const TableBody = props => {
           <button
             type="button"
             className="btn btn-secondary"
+            onClick={ () => props.editTask (element.id) }
             >
               Edit
           </button>
