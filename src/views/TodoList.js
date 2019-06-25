@@ -13,6 +13,7 @@ class TodoList extends Component {
       currentTask: {
         id: 0,
         title: '',
+        done: false,
         description: '',
         dateTime: '',
         duration: '',
@@ -48,7 +49,8 @@ class TodoList extends Component {
   }
 
   handleChange = event => {
-    const {name, value} = event.target;
+    let { name, value } = event.target;
+    value = name !== 'done' ? value : !this.state.currentTask.done
 
     this.setState({
       currentTask:{

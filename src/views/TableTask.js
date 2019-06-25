@@ -35,7 +35,7 @@ export const TableBody = props => {
   const result = props.tasks.map( element => {
     return (
       <tr key={element.id}>
-        <td>{ element.title }</td>
+        <td>{ element.title }{ element.done? ' - done' : '' } </td>
         <td>
           <button
             type="button"

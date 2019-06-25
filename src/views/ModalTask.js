@@ -56,23 +56,52 @@ class ModalTask extends Component {
 
 export const TaskForm = props => {
 
-  const inputs = Object.keys(props.state).map(key => {
+  const types = input => {
+    switch(input){
+      case 'done' : return inputCheckbox(input)
+      case 'dateTime' : return inputTextDate(input, 'datetime-local')
+      default: return inputTextDate(input)
+    }
+  }
+
+  const inputTextDate = (key, type = 'text') => {
     return (
-      <Form.Group key={key} >
-        <Form.Label>{key}</Form.Label>
-        <Form.Control
-          type = { key.includes('date') ? 'datetime-local' : 'text'}
-          name = { key }
-          placeholder = { key }
-          value = { props.state[key] }
-          onChange = { props.onChange }
-        />
-      </Form.Group>
+      <Form.Control
+        type = { type }
+        name = { key }
+        placeholder = { key }
+        value = { props.state[key] }
+        onChange = { props.onChange }
+      />
     )
+  }
+
+  const inputCheckbox = key => {
+    return(
+      <Form.Check
+        type= "checkbox"
+        name= { key }
+        label= { key }
+        value = { props.state[key] }
+        onChange = { props.onChange }
+      />
+    )
+  }
+
+  const inputs = Object.keys(props.state).map(key => {
+    if(key !== 'id')
+    {
+      return (
+        <Form.Group key={key} >
+          { types(key) }
+        </Form.Group>
+      )
+    }
   })
 
   return <Form> { inputs } </Form>
 
 }
+
 
 export default ModalTask
