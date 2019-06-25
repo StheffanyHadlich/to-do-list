@@ -33,7 +33,8 @@ class TodoList extends Component {
   }
 
   handleCreate = task => {
-    task = {...task, id: Math.floor(Math.random() * 100)}
+    const uuidv1 = require('uuid/v1')
+    task = {...task, id: uuidv1()}
     this.setState({
       tasks: [...this.state.tasks, task ],
       currentTask: this.initialState.currentTask

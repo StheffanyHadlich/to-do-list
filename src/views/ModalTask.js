@@ -57,7 +57,6 @@ class ModalTask extends Component {
 export const TaskForm = props => {
 
   const inputs = Object.keys(props.state).map(key => {
-
     return (
       <Form.Group key={key} >
         <Form.Label>{key}</Form.Label>
