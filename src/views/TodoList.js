@@ -33,7 +33,10 @@ class TodoList extends Component {
 
   handleEdit = async currentTask => {
     await this.deleteTask(currentTask.id)
-    this.setState({ tasks: [...this.state.tasks, currentTask]})
+    this.setState({
+      tasks: [...this.state.tasks, currentTask],
+      currentTask: this.initialState.currentTask
+    })
 
   }
 
@@ -78,7 +81,7 @@ class TodoList extends Component {
   }
 
   resetSearch = () => {
-    if(!this.state.search)
+    if(this.state.search)
       return
 
     this.setState({
@@ -95,7 +98,7 @@ class TodoList extends Component {
 
     this.setState({
       tasks: this.state.tasks.map( task => {
-        if(!task.title.includes(this.state.search))
+        if(!task.title.includes(this.state.search) && !task.description.includes(this.state.search))
           task.show = false
 
         return task
