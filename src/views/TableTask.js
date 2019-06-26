@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table'
 
+
 class TableTask extends Component {
 
   render () {
@@ -33,6 +34,9 @@ export const TableHead = () => {
 export const TableBody = props => {
 
   const result = props.tasks.map( element => {
+    if(!element.show)
+      return
+
     return (
       <tr key={element.id}>
         <td>{ element.title }{ element.done? ' - done' : '' } </td>

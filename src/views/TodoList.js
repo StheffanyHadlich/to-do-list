@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TableTask from './TableTask'
 import ModalTask from './ModalTask'
+import Filter from './Filter'
 
 
 class TodoList extends Component {
@@ -10,6 +11,7 @@ class TodoList extends Component {
     this.initialState = {
       tasks: [],
       showModal: false,
+      search: '',
       currentTask: {
         id: 0,
         title: '',
@@ -17,7 +19,8 @@ class TodoList extends Component {
         description: '',
         dateTime: '',
         duration: '',
-        reminder: ''
+        reminder: '',
+        show: true // pros filtros assim da pra alterar quais devem aparecer sem comprometer a existência
       }
     }
 
@@ -48,8 +51,8 @@ class TodoList extends Component {
     return !task.id ? this.handleCreate(task) : this.handleEdit(task)
   }
 
-  handleChange = event => {
-    let { name, value } = event.target;
+  handleFormChange = event => {
+    let { name, value } = event.target
     value = name !== 'done' ? value : !this.state.currentTask.done
 
     this.setState({
@@ -58,6 +61,44 @@ class TodoList extends Component {
         [name]: value
       }
     });
+  }
+
+  handleFilterChange = event => {
+    const { name, value } = event.target
+
+    if(name === 'search')
+      this.resetSearch()
+
+    this.setState({
+      [name]: value
+    })
+
+
+  }
+
+  resetSearch = () => {
+    if(!this.state.search)
+      return
+
+    this.setState({
+      tasks:  this.state.tasks.map( task => {
+        task.show = true
+        return task
+      })
+    })
+  }
+
+  handleSearch  = () => {
+    this.resetSearch()
+
+    this.setState({
+      tasks: this.state.tasks.map( task => {
+        if(!task.title.includes(this.state.search))
+          task.show = false
+
+        return task
+      })
+    })
   }
 
   deleteTask = id => {
@@ -76,7 +117,12 @@ class TodoList extends Component {
 
   render () {
       return (
-        <div>
+        <>
+          <Filter
+            search = { this.state.search }
+            onChange = { this.handleFilterChange }
+            onClickSearch = { this.handleSearch }
+          />
           <TableTask
             tasks = { this.state.tasks }
             deleteTask = { this.deleteTask }
@@ -87,9 +133,9 @@ class TodoList extends Component {
             currentTask = { this.state.currentTask }
             handleModal = { this.handleModal }
             handleSubmit = { this.handleSubmit }
-            handleChange = { this.handleChange }
+            handleChange = { this.handleFormChange }
           />
-        </div>
+        </>
       )
   }
 }

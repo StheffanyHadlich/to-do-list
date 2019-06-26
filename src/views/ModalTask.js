@@ -89,7 +89,7 @@ export const TaskForm = props => {
   }
 
   const inputs = Object.keys(props.state).map(key => {
-    if(key !== 'id')
+    if(key !== 'id' && key !== 'show')
     {
       return (
         <Form.Group key={key} >
