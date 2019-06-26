@@ -12,6 +12,7 @@ class TodoList extends Component {
       tasks: [],
       showModal: false,
       search: '',
+      status: 'all',
       currentTask: {
         id: 0,
         title: '',
@@ -63,7 +64,7 @@ class TodoList extends Component {
     });
   }
 
-  handleFilterChange = event => {
+  handleSearcheChange = event => {
     const { name, value } = event.target
 
     if(name === 'search')
@@ -84,7 +85,8 @@ class TodoList extends Component {
       tasks:  this.state.tasks.map( task => {
         task.show = true
         return task
-      })
+      }),
+      search: ''
     })
   }
 
@@ -120,10 +122,12 @@ class TodoList extends Component {
         <>
           <Filter
             search = { this.state.search }
-            onChange = { this.handleFilterChange }
+            status = { this.state.status }
+            onChange = { this.handleSearcheChange }
             onClickSearch = { this.handleSearch }
           />
           <TableTask
+            status = { this.state.status }
             tasks = { this.state.tasks }
             deleteTask = { this.deleteTask }
             editTask = { this.editTask }
