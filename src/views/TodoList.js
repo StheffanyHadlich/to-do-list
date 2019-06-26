@@ -13,6 +13,7 @@ class TodoList extends Component {
       showModal: false,
       search: '',
       status: 'all',
+      period: 'all',
       currentTask: {
         id: 0,
         title: '',
@@ -76,8 +77,6 @@ class TodoList extends Component {
     this.setState({
       [name]: value
     })
-
-
   }
 
   resetSearch = () => {
@@ -126,11 +125,13 @@ class TodoList extends Component {
           <Filter
             search = { this.state.search }
             status = { this.state.status }
+            period = { this.state.period }
             onChange = { this.handleSearcheChange }
             onClickSearch = { this.handleSearch }
           />
           <TableTask
             status = { this.state.status }
+            period = { this.state.period }
             tasks = { this.state.tasks }
             deleteTask = { this.deleteTask }
             editTask = { this.editTask }

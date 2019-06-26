@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 class Filter extends Component {
 
   render() {
-    const { search, status, onChange, onClickSearch } = this.props
+    const { search, status, period, onChange, onClickSearch } = this.props
 
     return(
       <>
@@ -15,47 +15,41 @@ class Filter extends Component {
           onChange = { onChange }
           onClick = { onClickSearch }
         />
-        <Status
+        <Radio
           onChange = { onChange }
-          status = { status }
+          checked = { status }
+          options = { ['all', 'done', 'unfinished'] }
+          name = "status"
+        />
+        <Radio
+          onChange = { onChange }
+          checked = { period }
+          options = { ['all', 'today', 'month', 'year'] }
+          name = "period"
         />
       </>
     )
   }
 }
 
-export const Status = props => { //TODO: Revisar radio buttons
-  return (
-    <Form.Group >
+export const Radio = props => { //TODO: Revisar radio buttons
+
+  const radioButtons = props.options.map( (option, index) => {
+    return(
       <Form.Check
-        inline name = "show"
-        label="All"
-        value = "all"
-        name="status"
+        key = { index }
+        inline
+        label = { option }
+        value = { option }
+        name = { props.name }
         onChange = { props.onChange }
-        checked = { props.status === 'all' }
-        type="radio"
+        checked = { props.checked === option }
+        type = "radio"
       />
-      <Form.Check
-        inline name = "show"
-        label="Done"
-        value = "done"
-        name="status"
-        onChange = { props.onChange }
-        checked = { props.status === "done" }
-        type="radio"
-      />
-      <Form.Check
-        inline name = "show"
-        label="Unfinished"
-        name="status"
-        value = "unfinished"
-        onChange = { props.onChange }
-        checked = { props.status === "unfinished" }
-        type="radio"
-      />
-    </Form.Group>
-  )
+    )
+  })
+
+  return <Form.Group > { radioButtons } </Form.Group>
 }
 
 export const Search = props => {
