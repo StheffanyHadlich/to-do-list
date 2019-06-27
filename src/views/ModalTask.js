@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import Badge from 'react-bootstrap/Badge'
+import CreatableSelect from 'react-select/creatable';
+
 
 class ModalTask extends Component {
   constructor(props, context) {
@@ -18,7 +21,7 @@ class ModalTask extends Component {
   }
 
   render() {
-    const { showModal, handleModal, currentTask, handleChange } = this.props
+    const { showModal, tags, handleModal, currentTask, handleChange } = this.props
 
     return (
       <>
@@ -36,7 +39,8 @@ class ModalTask extends Component {
           </Modal.Header>
           <Modal.Body>
             <TaskForm
-              state={ currentTask }
+              tags = { tags }
+              state = { currentTask }
               onChange={ handleChange }
             />
           </Modal.Body>
@@ -60,6 +64,7 @@ export const TaskForm = props => {
     switch(input){
       case 'done' : return inputCheckbox(input)
       case 'dateTime' : return inputTextDate(input, 'datetime-local')
+      case 'tags': return tagSelector(input)
       default: return inputTextDate(input)
     }
   }
@@ -88,15 +93,50 @@ export const TaskForm = props => {
     )
   }
 
-  const inputs = Object.keys(props.state).map(key => {
+  const selectOptions = () => {
+    return props.tags.map( tag => {
+        return { value: tag, label: tag }
+      })
+  }
+
+  const getSelectedTags = tags => {
+    return tags.map( tag =>{
+        return tag.value
+      }
+    )
+  }
+
+  const tagBadges = () => {
+    return props.state.tags.map(tag => {
+      return <Badge variant="secondary"> { tag } </Badge>
+    })
+  }
+
+  const tagSelector = () => {
+    console.log( props.state.tags )
+    return (
+      <>
+        <CreatableSelect
+          //value = { props.state.tags }
+          isMulti
+          onChange={ tags => props.onChange({ target: {name:'tags', value: getSelectedTags(tags)}}) }
+		    	options={ selectOptions() }
+        />
+        { tagBadges() }
+      </>
+    )
+  }
+
+  const inputs = Object.keys(props.state).map( (key, index) => {
     if(key !== 'id' && key !== 'show')
     {
       return (
-        <Form.Group key={key} >
+        <Form.Group key={ index } >
           { types(key) }
         </Form.Group>
       )
     }
+    return <></>
   })
 
   return <Form> { inputs } </Form>

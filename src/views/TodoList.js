@@ -10,6 +10,7 @@ class TodoList extends Component {
 
     this.initialState = {
       tasks: [],
+      tags: [ 'test', 'exe' ],
       showModal: false,
       search: '',
       status: 'all',
@@ -21,8 +22,8 @@ class TodoList extends Component {
         description: '',
         dateTime: '',
         duration: '',
-        reminder: '',
-        show: true // pros filtros assim da pra alterar quais devem aparecer sem comprometer a existência
+        tags: [],
+        show: true
       }
     }
 
@@ -34,26 +35,22 @@ class TodoList extends Component {
 
   handleEdit = async currentTask => {
     await this.deleteTask(currentTask.id)
-    this.setState({
-      tasks: [...this.state.tasks, currentTask],
-      currentTask: this.initialState.currentTask
-    })
-
   }
 
   handleCreate = task => {
     const uuidv1 = require('uuid/v1')
     task = {...task, id: uuidv1()}
-    this.setState({
-      tasks: [...this.state.tasks, task ],
-      currentTask: this.initialState.currentTask
-    })
   }
 
   handleSubmit = () => {
     let task = this.state.currentTask
+    !task.id ? this.handleCreate(task) : this.handleEdit(task)
 
-    return !task.id ? this.handleCreate(task) : this.handleEdit(task)
+    this.setState({
+      tasks: [ ...this.state.tasks, task ],
+      tags: [ ...this.state.tags, ...task.tags ].filter((element, index, array) => array.indexOf(element) === index),
+      currentTask: this.initialState.currentTask
+    })
   }
 
   handleFormChange = event => {
@@ -137,6 +134,7 @@ class TodoList extends Component {
             editTask = { this.editTask }
           />
           <ModalTask
+            tags = { this.state.tags }
             showModal = { this.state.showModal }
             currentTask = { this.state.currentTask }
             handleModal = { this.handleModal }

@@ -32,7 +32,7 @@ class Filter extends Component {
   }
 }
 
-export const Radio = props => { //TODO: Revisar radio buttons
+export const Radio = props => {
 
   const radioButtons = props.options.map( (option, index) => {
     return(

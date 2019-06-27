@@ -94,8 +94,7 @@ export const TableBody = props => {
         </tr>
       )
     }
-
-
+    return <></>
   })
 
   return <tbody>{ result }</tbody>
