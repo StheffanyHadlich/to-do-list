@@ -61,9 +61,10 @@ export const TaskForm = props => {
       type="checkbox"
       name={key}
       label={key}
-      value={props.state[key]}
+      defaultChecked={props.state[key]}
       onChange={props.onChange}
     />
+
 
   const getValues = () => props.state.tags.map(tag => ({ value: tag, label: tag }))
 

@@ -79,7 +79,7 @@ class TodoList extends Component {
 
   handleFormChange = event => {
     let { name, value } = event.target
-    value = typeof value !== "boolean" ? value : !this.state.currentTask[name]
+    value = name !== "done" ? value : !this.state.currentTask[name]
 
     this.setState({
       currentTask: {
