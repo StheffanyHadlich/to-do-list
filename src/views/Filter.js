@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Select from 'react-select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 class Filter extends Component {
 
@@ -89,7 +91,8 @@ export const Search = props =>
         variant="btn btn-primary"
         onClick={props.onClick}
       >
-        Serach
+        <FontAwesomeIcon icon={faSearch} />
+
       </Button>
     </div>
 

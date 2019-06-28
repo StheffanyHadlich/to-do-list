@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import CreatableSelect from 'react-select/creatable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 class ModalTask extends Component {
 
@@ -16,7 +18,7 @@ class ModalTask extends Component {
           onClick={handleModal}
           className="buttonModal"
         >
-          +
+          <FontAwesomeIcon icon={faPlus} />
         </Button>
 
         <Modal show={showModal} onHide={handleModal}>

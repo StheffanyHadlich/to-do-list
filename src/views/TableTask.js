@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash, faEdit, faCheck} from '@fortawesome/free-solid-svg-icons'
+
 
 
 class TableTask extends Component {
@@ -25,6 +28,7 @@ export const TableHead = () =>
   <thead>
     <tr>
       <th>Tasks</th>
+      <th>Status</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -71,21 +75,22 @@ export const TableBody = props => {
     if (element.show && statusCheck(element.done) && periodCheck(element.dateTime)) {
       return (
         <tr key={element.id}>
-          <td>{element.title}{element.done ? ' - done' : ''} </td>
+          <td>{element.title}</td>
+          <td>{element.done ? <FontAwesomeIcon icon={faCheck} /> : '' } </td>
           <td>
             <button
               type="button"
               className="btn btn-secondary"
               onClick={() => props.editTask(element.id)}
             >
-              Edit
+              <FontAwesomeIcon icon={faEdit} />
             </button>
             <button
               type="button"
               className="btn btn-danger"
               onClick={() => props.deleteTask(element.id)}
             >
-              Delete
+              <FontAwesomeIcon icon={faTrash} />
             </button>
           </td>
         </tr>
