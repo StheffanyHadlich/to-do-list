@@ -1,28 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Table from 'react-bootstrap/Table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faCheck} from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faEdit, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 
 
-class TableTask extends Component {
-
-  render() {
-    const { tasks, status, period, deleteTask, editTask } = this.props
-    return (
-      <Table>
-        <TableHead />
-        <TableBody
-          tasks={tasks}
-          completionStatus={status}
-          period={period}
-          deleteTask={deleteTask}
-          editTask={editTask}
-        />
-      </Table>
-    )
-  }
-}
+export const TableTask = props =>
+  <Table>
+    <TableHead />
+    <TableBody
+      tasks={props.tasks}
+      completionStatus={props.status}
+      period={props.period}
+      deleteTask={props.deleteTask}
+      editTask={props.editTask}
+    />
+  </Table>
 
 export const TableHead = () =>
   <thead>
@@ -76,7 +69,7 @@ export const TableBody = props => {
       return (
         <tr key={element.id}>
           <td>{element.title}</td>
-          <td>{element.done ? <FontAwesomeIcon icon={faCheck} /> : '' } </td>
+          <td>{element.done ? <FontAwesomeIcon icon={faCheck} /> : ''} </td>
           <td>
             <button
               type="button"

@@ -48,32 +48,33 @@ class TodoList extends Component {
       .catch(error => console.log(error))
 
   postTask = () =>
-    TaskModel.add(this.state.currentTask)
-      .then(() => this.handleSubmit())
+    TaskModel.save(this.state.currentTask)
+      .then(this.handleSubmit)
       .catch(error => console.log(error))
 
   editTask = async id => {
     TaskModel.get(id)
       .then(result => this.setState({ currentTask: result }))
       .catch(error => console.log(error))
-    this.handleModal()
+    this.toggleModal()
   }
 
   destroyTask = id =>
     TaskModel.destroy(id)
-      .then(() => this.updateTasks())
+      .then(this.updateTasks)
       .catch(error => console.log(error))
 
   handleSubmit = () => {
     this.updateTasks()
-    this.handleModal()
+    this.updateTags()
+    this.toggleModal()
   }
 
   resetCurrentTask = () => this.setState({ currentTask: this.initialState.currentTask })
 
   handleEdit = async currentTask => await this.deleteTask(currentTask.id)
 
-  handleModal = () => {
+  toggleModal = () => {
     this.resetCurrentTask()
     this.setState({ showModal: !this.state.showModal })
   }
@@ -118,8 +119,10 @@ class TodoList extends Component {
 
     this.setState({
       tasks: this.state.tasks.map(task => {
-        task.show = true
-        return task
+        return {
+          ...task,
+          show: true
+        }
       }),
       search: ''
     })
@@ -130,11 +133,10 @@ class TodoList extends Component {
 
     this.setState({
       tasks: this.state.tasks.map(task => {
-        const regex = new RegExp(`[${task.title} ${task.description}]`,"i");
-        if(!regex.test(this.state.search))
-          task.show = false
-
-        return task
+        return {
+          ...task,
+          show: TaskModel.search(task,this.state.search)
+        }
       })
     })
   }
@@ -144,9 +146,10 @@ class TodoList extends Component {
     if (this.state.filterTags) {
       this.setState({
         tasks: this.state.tasks.map(task=> {
-          const taskTags = task.tags.map(item => item.name)
-          task.show = this.state.filterTags.every(item =>  taskTags.includes(item))
-          return task
+          return {
+            ...task,
+            show: TaskModel.filterByTag(this.state.filterTags, task.tags)
+          }
         })
       })
     }
@@ -178,7 +181,7 @@ class TodoList extends Component {
           currentTask={this.state.currentTask}
           handleSubmit={this.postTask}
           handleChange={this.handleFormChange}
-          handleModal={this.handleModal}
+          toggleModal={this.toggleModal}
         />
       </div>
     )

@@ -1,46 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
-class Filter extends Component {
-
-  render() {
-    const { search, status, selectOptions, getSelectedTags, period, onChange, onClickSearch, filterByTag } = this.props
-
-    return (
+export const Filter = props =>
       <>
         <Search
-          search={search}
-          onChange={onChange}
-          onClick={onClickSearch}
+          search={props.search}
+          onChange={props.onChange}
+          onClick={props.onClickSearch}
         />
         <FilterTag
-          onClick={filterByTag}
-          onChange={onChange}
-          selectOptions={selectOptions}
-          getSelectedTags={getSelectedTags}
+          onClick={props.filterByTag}
+          onChange={props.onChange}
+          selectOptions={props.selectOptions}
+          getSelectedTags={props.getSelectedTags}
         />
-        <Form.Label>by completion status</Form.Label>
+        <Form.Label>Filter by completion status</Form.Label>
         <Radio
-          onChange={onChange}
-          checked={status}
+          onChange={props.onChange}
+          checked={props.status}
           options={['all', 'done', 'unfinished']}
           name="status"
         />
-        <Form.Label>by period</Form.Label>
+        <Form.Label>Filter by period</Form.Label>
         <Radio
-          onChange={onChange}
-          checked={period}
+          onChange={props.onChange}
+          checked={props.period}
           options={['all', 'today', 'month', 'year']}
           name="period"
         />
       </>
-    )
-  }
-}
+
 
 export const FilterTag = props =>
   <Form.Group>
@@ -57,10 +50,10 @@ export const FilterTag = props =>
 
 export const Radio = props => {
 
-  const radioButtons = props.options.map((option, index) => {
+  const radioButtons = props.options.map(option => {
     return (
       <Form.Check
-        key={index}
+        key={option}
         inline
         label={option}
         value={option}
