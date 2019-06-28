@@ -138,14 +138,15 @@ class TodoList extends Component {
   }
 
   filterByTags = () => {
-    if (this.state.filterTags) {
-      // this.setState({
-      //   tasks: this.state.tasks.map(task=> {
-      //     task.show = this.state.filterTags.reduce((show, item)  => show && task.tags.includes(item), true)
 
-      //     return task
-      //   })
-      // })
+    if (this.state.filterTags) {
+      this.setState({
+        tasks: this.state.tasks.map(task=> {
+          const taskTags = task.tags.map(item => item.name)
+          task.show = this.state.filterTags.every(item =>  taskTags.includes(item))
+          return task
+        })
+      })
     }
   }
 

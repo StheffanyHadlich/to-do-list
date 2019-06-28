@@ -5,7 +5,6 @@ export const getAll = async function(){
 }
 
 export const add = async function(task){
-  console.log(task)
   return await task.id ? TaskRepository.update(task) : TaskRepository.add(task)
 }
 
@@ -15,7 +14,6 @@ export const destroy = async function(id){
 
 export const get = async function(id){
   const tasks = await TaskRepository.get(id)
-  console.log(tasks)
   return tasks
 }
 

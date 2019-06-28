@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import Badge from 'react-bootstrap/Badge'
 import CreatableSelect from 'react-select/creatable';
 
 class ModalTask extends Component {
@@ -66,10 +65,7 @@ export const TaskForm = props => {
       onChange={props.onChange}
     />
 
-  const tagBadges = () =>
-    props.state.tags.map((tag, index) => {
-      return <Badge key={index} variant="secondary"> {tag} </Badge>
-    })
+  const getValues = () => props.state.tags.map(tag => ({ value: tag, label: tag }))
 
   const tagSelector = () =>
     <>
@@ -77,9 +73,8 @@ export const TaskForm = props => {
         isMulti
         onChange={tags => props.onChange({ target: { name: 'tags', value: props.getSelectedTags(tags) } })}
         options={props.selectOptions()}
-        setValue={'teste'}
+        value={ getValues() }
       />
-      {tagBadges()}
     </>
 
 
