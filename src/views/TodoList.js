@@ -130,7 +130,8 @@ class TodoList extends Component {
 
     this.setState({
       tasks: this.state.tasks.map(task => {
-        if (!task.title.includes(this.state.search) && !task.description.includes(this.state.search))
+        const regex = new RegExp(`[${task.title} ${task.description}]`,"i");
+        if(!regex.test(this.state.search))
           task.show = false
 
         return task
