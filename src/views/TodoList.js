@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import TableTask from './TableTask'
 import ModalTask from './ModalTask'
 import Filter from './Filter'
-
+import * as TaskModel from '../model/TaskModel'
+import * as TagModel from '../model/TagModel'
 
 class TodoList extends Component {
   constructor(props) {
@@ -10,13 +11,13 @@ class TodoList extends Component {
 
     this.initialState = {
       tasks: [],
-      tags: [ 'test', 'exe' ],
+      tags: [],
+      filterTags: [],
       showModal: false,
       search: '',
       status: 'all',
       period: 'all',
       currentTask: {
-        id: 0,
         title: '',
         done: false,
         description: '',
@@ -30,58 +31,92 @@ class TodoList extends Component {
     this.state = this.initialState
   }
 
-
-  handleModal = () => this.setState({ showModal: !this.state.showModal })
-
-  handleEdit = async currentTask => {
-    await this.deleteTask(currentTask.id)
+  componentDidMount() {
+    this.updateTasks()
+    this.updateTags()
   }
 
-  handleCreate = task => {
-    const uuidv1 = require('uuid/v1')
-    task = {...task, id: uuidv1()}
+  updateTags = () =>
+    TagModel.getAll()
+      .then(result => this.setState({ tags: result }))
+      .catch(error => console.log(error))
+
+  updateTasks = () =>
+    TaskModel.getAll()
+      .then(result => this.setState({ tasks: result }))
+      .catch(error => console.log(error))
+
+  postTask = () =>
+    TaskModel.add(this.state.currentTask)
+      .then(() => this.handleSubmit())
+      .catch(error => console.log(error))
+
+  editTask = async id => {
+    TaskModel.get(id)
+      .then(result => this.setState({ currentTask: result }))
+      .catch(error => console.log(error))
+    this.handleModal()
   }
+
+  destroyTask = id =>
+    TaskModel.destroy(id)
+      .then(() => this.updateTasks())
+      .catch(error => console.log(error))
 
   handleSubmit = () => {
-    let task = this.state.currentTask
-    !task.id ? this.handleCreate(task) : this.handleEdit(task)
+    this.updateTasks()
+    this.handleModal()
+  }
 
-    this.setState({
-      tasks: [ ...this.state.tasks, task ],
-      tags: [ ...this.state.tags, ...task.tags ].filter((element, index, array) => array.indexOf(element) === index),
-      currentTask: this.initialState.currentTask
-    })
+  resetCurrentTask = () => this.setState({ currentTask: this.initialState.currentTask })
+
+  handleEdit = async currentTask => await this.deleteTask(currentTask.id)
+
+  handleModal = () => {
+    this.resetCurrentTask()
+    this.setState({ showModal: !this.state.showModal })
   }
 
   handleFormChange = event => {
     let { name, value } = event.target
-    value = name !== 'done' ? value : !this.state.currentTask.done
+    value = typeof value !== "boolean" ? value : !this.state.currentTask[name]
 
     this.setState({
-      currentTask:{
+      currentTask: {
         ...this.state.currentTask,
         [name]: value
       }
     });
   }
 
-  handleSearcheChange = event => {
+  handleSearcheChange = async event => {
     const { name, value } = event.target
 
-    if(name === 'search')
-      this.resetSearch()
-
-    this.setState({
+    await this.setState({
       [name]: value
     })
+
+    if (name === 'search')
+      this.resetSearch()
+
+    if (name === 'filterTags')
+      this.filterByTags()
   }
 
+  selectOptions = () =>
+    this.state.tags.map(tag => ({
+      value: tag.name,
+      label: tag.name
+    }))
+
+  getSelectedTags = tags => tags ? tags.map(tag => tag.label) : []
+
   resetSearch = () => {
-    if(this.state.search)
+    if (this.state.search)
       return
 
     this.setState({
-      tasks:  this.state.tasks.map( task => {
+      tasks: this.state.tasks.map(task => {
         task.show = true
         return task
       }),
@@ -89,12 +124,12 @@ class TodoList extends Component {
     })
   }
 
-  handleSearch  = () => {
+  handleSearch = () => {
     this.resetSearch()
 
     this.setState({
-      tasks: this.state.tasks.map( task => {
-        if(!task.title.includes(this.state.search) && !task.description.includes(this.state.search))
+      tasks: this.state.tasks.map(task => {
+        if (!task.title.includes(this.state.search) && !task.description.includes(this.state.search))
           task.show = false
 
         return task
@@ -102,47 +137,48 @@ class TodoList extends Component {
     })
   }
 
-  deleteTask = id => {
-    this.setState({
-      tasks: this.state.tasks.filter( task => task.id !== id )
-    })
+  filterByTags = () => {
+    if (this.state.filterTags) {
+      // this.setState({
+      //   tasks: this.state.tasks.map(task=> {
+      //     task.show = this.state.filterTags.reduce((show, item)  => show && task.tags.includes(item), true)
+
+      //     return task
+      //   })
+      // })
+    }
   }
 
-  editTask = async id => {
-    await this.state.tasks.forEach( task => {
-      if(task.id === id)
-        this.setState({ currentTask: task})
-    })
-    this.handleModal()
-  }
-
-  render () {
-      return (
-        <>
-          <Filter
-            search = { this.state.search }
-            status = { this.state.status }
-            period = { this.state.period }
-            onChange = { this.handleSearcheChange }
-            onClickSearch = { this.handleSearch }
-          />
-          <TableTask
-            status = { this.state.status }
-            period = { this.state.period }
-            tasks = { this.state.tasks }
-            deleteTask = { this.deleteTask }
-            editTask = { this.editTask }
-          />
-          <ModalTask
-            tags = { this.state.tags }
-            showModal = { this.state.showModal }
-            currentTask = { this.state.currentTask }
-            handleModal = { this.handleModal }
-            handleSubmit = { this.handleSubmit }
-            handleChange = { this.handleFormChange }
-          />
-        </>
-      )
+  render() {
+    return (
+      <>
+        <Filter
+          selectOptions={this.selectOptions}
+          getSelectedTags={this.getSelectedTags}
+          search={this.state.search}
+          status={this.state.status}
+          period={this.state.period}
+          onChange={this.handleSearcheChange}
+          onClickSearch={this.handleSearch}
+        />
+        <TableTask
+          status={this.state.status}
+          period={this.state.period}
+          tasks={this.state.tasks}
+          deleteTask={this.destroyTask}
+          editTask={this.editTask}
+        />
+        <ModalTask
+          selectOptions={this.selectOptions}
+          getSelectedTags={this.getSelectedTags}
+          showModal={this.state.showModal}
+          currentTask={this.state.currentTask}
+          handleSubmit={this.postTask}
+          handleChange={this.handleFormChange}
+          handleModal={this.handleModal}
+        />
+      </>
+    )
   }
 }
 
