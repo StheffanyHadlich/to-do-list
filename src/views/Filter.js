@@ -10,23 +10,25 @@ class Filter extends Component {
 
     return (
       <>
+        <Search
+          search={search}
+          onChange={onChange}
+          onClick={onClickSearch}
+        />
         <FilterTag
           onClick={filterByTag}
           onChange={onChange}
           selectOptions={selectOptions}
           getSelectedTags={getSelectedTags}
         />
-        <Search
-          search={search}
-          onChange={onChange}
-          onClick={onClickSearch}
-        />
+        <Form.Label>by completion status</Form.Label>
         <Radio
           onChange={onChange}
           checked={status}
           options={['all', 'done', 'unfinished']}
           name="status"
         />
+        <Form.Label>by period</Form.Label>
         <Radio
           onChange={onChange}
           checked={period}
@@ -40,8 +42,10 @@ class Filter extends Component {
 
 export const FilterTag = props =>
   <Form.Group>
+    <Form.Label>Filter by tag</Form.Label>
     <Select
       isMulti
+      className="input-select"
       name="tags"
       options={props.selectOptions()}
       onChange={tags => props.onChange({ target: { name: 'filterTags', value: props.getSelectedTags(tags) } })}
@@ -71,19 +75,24 @@ export const Radio = props => {
 
 export const Search = props =>
   <Form.Group>
-    <Form.Control
-      type="text"
-      placeholder="Search"
-      name="search"
-      value={props.search}
-      onChange={props.onChange}
-    />
-    <Button
-      variant="btn btn-primary"
-      onClick={props.onClick}
-    >
-      Serach
+    <Form.Label>Search by title or description </Form.Label>
+    <div className="search-bar">
+      <Form.Control
+        type="text"
+        className="input-select"
+        placeholder="Search"
+        name="search"
+        value={props.search}
+        onChange={props.onChange}
+      />
+      <Button
+        variant="btn btn-primary"
+        onClick={props.onClick}
+      >
+        Serach
       </Button>
+    </div>
+
   </Form.Group>
 
 export default Filter

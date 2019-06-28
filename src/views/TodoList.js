@@ -4,6 +4,7 @@ import ModalTask from './ModalTask'
 import Filter from './Filter'
 import * as TaskModel from '../model/TaskModel'
 import * as TagModel from '../model/TagModel'
+import '../App.css';
 
 class TodoList extends Component {
   constructor(props) {
@@ -152,7 +153,7 @@ class TodoList extends Component {
 
   render() {
     return (
-      <>
+      <div className="todo-list">
         <Filter
           selectOptions={this.selectOptions}
           getSelectedTags={this.getSelectedTags}
@@ -178,7 +179,7 @@ class TodoList extends Component {
           handleChange={this.handleFormChange}
           handleModal={this.handleModal}
         />
-      </>
+      </div>
     )
   }
 }
