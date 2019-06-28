@@ -1,68 +1,70 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# To do list
 
-## Available Scripts
+It is a to do list
 
-In the project directory, you can run:
+## Instalation
 
-### `npm start`
+First clone this repository
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+ $ git clone https://github.com/StheffanyHadlich/to-do-list.git
+ $ cd to-do-list
+```
+Then install the dependencies
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```
+$ yarn
+```
+and now you can run the application with
 
-### `npm test`
+```
+$ yarn start
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This app runs with an external rails API, you can visit it in ``` https://geru-to-do-list-api.herokuapp.com/``` its repository also can be found at ```https://github.com/StheffanyHadlich/to-do-list-api```
 
-### `npm run build`
+## API endpoints
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+These are the available endpoints for this aplication
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+`official client only` [/1/billing/retrieve-billing-data.json](#get-1billingretrieve-billing-datajson) <br/>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### GET
 
-### `npm run eject`
+`tasks` [/tasks](https://geru-to-do-list-api.herokuapp.com/tasks) <br>
+`tasks` [/tasks/:id_task](https://geru-to-do-list-api.herokuapp.com/tasks) <br><br>
+`tags` [/tasks](https://geru-to-do-list-api.herokuapp.com/tags)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### POST
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`tasks` [/tasks](https://geru-to-do-list-api.herokuapp.com/tasks) <br>
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Parameters
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+| Name    | required    | Type   |
+| --------| ------------|--------|
+| `task`  | required    | Object |
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### PATCH
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`tasks` [/tasks/:id_task](https://geru-to-do-list-api.herokuapp.com/) <br>
 
-### Code Splitting
+#### Parameters
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+| Name    | required    | Type   |
+| --------| ------------|--------|
+| `task`  | required    | Object |
 
-### Analyzing the Bundle Size
+### DELETE
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+`tasks` [/tasks/:id_task](https://geru-to-do-list-api.herokuapp.com/) <br>
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-### Deployment
+____________________________
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `npm run build` fails to minify
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
