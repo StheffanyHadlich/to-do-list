@@ -16,12 +16,31 @@ export const get = async function(id){
   return await TaskRepository.get(id)
 }
 
-export const search = function(task, search) {
-  const regex = new RegExp(`[${task.title} ${task.description}]`,"i");
-  return regex.test(search)
+export const search = function(tasks, search) {
+  return tasks.map(task => {
+    const regex = new RegExp(`[${task.title} ${task.description}]`,"i");
+    return {
+      ...task,
+      show: regex.test(search)
+    }
+  })
 }
 
-export const filterByTag = function(filter, tags){
-  const taskTags = tags.map(item => item.name)
-  return filter.every(item =>  taskTags.includes(item))
+export const filterByTag = function(filter, tasks){
+  return tasks.map(task => {
+    const taskTags = task.tags.map(item => item.name)
+    return {
+      ...task,
+      show: filter.every(item =>  taskTags.includes(item))
+    }
+  })
+}
+
+export const resetSearch = function(tasks){
+  return tasks.map( task => {
+    return {
+      ...task,
+      show: true
+    }
+  })
 }

@@ -118,12 +118,7 @@ class TodoList extends Component {
       return
 
     this.setState({
-      tasks: this.state.tasks.map(task => {
-        return {
-          ...task,
-          show: true
-        }
-      }),
+      tasks:TaskModel.resetSearch(this.state.tasks),
       search: ''
     })
   }
@@ -132,12 +127,7 @@ class TodoList extends Component {
     this.resetSearch()
 
     this.setState({
-      tasks: this.state.tasks.map(task => {
-        return {
-          ...task,
-          show: TaskModel.search(task,this.state.search)
-        }
-      })
+      tasks: TaskModel.search(this.state.tasks,this.state.search)
     })
   }
 
@@ -145,12 +135,7 @@ class TodoList extends Component {
 
     if (this.state.filterTags) {
       this.setState({
-        tasks: this.state.tasks.map(task=> {
-          return {
-            ...task,
-            show: TaskModel.filterByTag(this.state.filterTags, task.tags)
-          }
-        })
+        tasks: TaskModel.filterByTag(this.state.filterTags, this.state.tasks)
       })
     }
   }

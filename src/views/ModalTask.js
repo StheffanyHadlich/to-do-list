@@ -59,14 +59,14 @@ export const InputCheckbox = props =>
 
 
 export const TagSelector = props => {
-  const getValues = () => props.tags.map(tag => ({ value: tag, label: tag }))
+  const getValues = props.tags.map(tag => ({ value: tag, label: tag }))
 
   return (
     <CreatableSelect
       isMulti
       onChange={tags => props.onChange({ target: { name: 'tags', value: props.getSelectedTags(tags) } })}
       options={props.selectOptions()}
-      value={getValues()}
+      value={getValues}
     />
   )
 }
@@ -97,16 +97,16 @@ export const TaskForm = props => {
   }
 
   const types = {
-    done:(<InputCheckbox
-        input={ 'done' }
-        checked={props.state.done}
-        onChange={props.onChange}
+    done: (<InputCheckbox
+      input={'done'}
+      checked={props.state.done}
+      onChange={props.onChange}
     />),
     dateTime: (<InputTextDate
-        input= { 'dateTime' }
-        type={'datetime-local'}
-        value={props.state.dateTime}
-        onChange={props.onChange}
+      input={'dateTime'}
+      type={'datetime-local'}
+      value={props.state.dateTime}
+      onChange={props.onChange}
     />),
     tags: (<TagSelector
       tags={props.state.tags}
